@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freelance_hair_colorplus/models/custom_hair_profile.dart';
+import 'package:freelance_hair_colorplus/screens/filter_screen.dart';
 
 class SwatchbookScreen extends StatefulWidget {
   const SwatchbookScreen({super.key});
@@ -13,7 +14,9 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
   final TextEditingController menuTextEditingController =
       TextEditingController();
 
-  List<String> shadeList = shades;
+  List<ColorShade> colorShades = createColorShades();
+  bool filtersApplied = false;
+  Set<String> appliedCategories = {};
 
   @override
   void dispose() {
@@ -21,10 +24,22 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
     super.dispose();
   }
 
+  void _toggleCategory(String category) {
+    setState(() {
+      if (appliedCategories.contains(category)) {
+        appliedCategories.remove(category);
+      } else {
+        appliedCategories.add(category);
+      }
+      filtersApplied = appliedCategories.isNotEmpty;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.sizeOf(context).height;
     double screenWidth = MediaQuery.sizeOf(context).width;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -91,11 +106,14 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
                     onSelected: (String? value) {
                       selectedValue = value;
                     },
-                    dropdownMenuEntries:
-                        shadeList.map<DropdownMenuEntry<String>>((String item) {
+                    dropdownMenuEntries: colorShades
+                        .where((item) =>
+                            appliedCategories.isEmpty ||
+                            appliedCategories.contains(item.type))
+                        .map<DropdownMenuEntry<String>>((ColorShade item) {
                       return DropdownMenuEntry<String>(
-                        value: item,
-                        label: item,
+                        value: item.shadeValue,
+                        label: item.shadeValue,
                       );
                     }).toList(),
                   ),
@@ -103,10 +121,21 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
                 //filter button
                 IconButton(
                   onPressed: () {
-                    print('filter tapped');
+                    print('filter tapped lmao');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FilterScreen(
+                          appliedCategories: appliedCategories,
+                          toggleCategory: _toggleCategory,
+                        ),
+                      ),
+                    );
                   },
-                  icon: const Icon(
-                    Icons.filter_alt_outlined,
+                  icon: Icon(
+                    filtersApplied
+                        ? Icons.filter_alt
+                        : Icons.filter_alt_outlined,
                     color: Colors.white,
                   ),
                   style: IconButton.styleFrom(
@@ -126,19 +155,21 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
                     crossAxisCount: 4,
                     crossAxisSpacing: 8.0,
                     mainAxisSpacing: 8.0),
-                itemCount: shadeList.length,
+                itemCount: colorShades.length,
                 itemBuilder: (context, index) {
+                  if (appliedCategories.isNotEmpty &&
+                      !appliedCategories.contains(colorShades[index].type)) {
+                    return Container();
+                  }
                   return GestureDetector(
                     onTap: () {
-                      //to add
-                      print(shadeList[index]);
+                      print(colorShades[index].shadeValue);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
-                          image: AssetImage(
-                              'assets/images/shadecolor_pngs/color_${shadeList[index]}.png'),
+                          image: AssetImage(colorShades[index].imagePath),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -148,11 +179,12 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
                           padding: const EdgeInsets.all(4),
                           color: Colors.black.withOpacity(0.6),
                           child: Text(
-                            shadeList[index],
+                            colorShades[index].shadeValue,
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: screenHeight / 65,
-                                fontWeight: FontWeight.w500),
+                              color: Colors.white,
+                              fontSize: screenHeight / 65,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),

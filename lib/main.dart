@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:freelance_hair_colorplus/screens/home_screen.dart';
+// import 'package:freelance_hair_colorplus/screens/home_screen.dart';
 import 'package:freelance_hair_colorplus/screens/swatchbook_screen.dart';
 
 void main() {
