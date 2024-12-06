@@ -155,21 +155,27 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
                     crossAxisCount: 4,
                     crossAxisSpacing: 8.0,
                     mainAxisSpacing: 8.0),
-                itemCount: colorShades.length,
+                itemCount: colorShades
+                    .where((shade) =>
+                        appliedCategories.isEmpty ||
+                        appliedCategories.contains(shade.type))
+                    .length,
                 itemBuilder: (context, index) {
-                  if (appliedCategories.isNotEmpty &&
-                      !appliedCategories.contains(colorShades[index].type)) {
-                    return Container();
-                  }
+                  final filteredShades = colorShades
+                      .where((shade) =>
+                          appliedCategories.isEmpty ||
+                          appliedCategories.contains(shade.type))
+                      .toList();
+
                   return GestureDetector(
                     onTap: () {
-                      print(colorShades[index].shadeValue);
+                      print(filteredShades[index].shadeValue);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
-                          image: AssetImage(colorShades[index].imagePath),
+                          image: AssetImage(filteredShades[index].imagePath),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -179,7 +185,7 @@ class _SwatchbookScreenState extends State<SwatchbookScreen> {
                           padding: const EdgeInsets.all(4),
                           color: Colors.black.withOpacity(0.6),
                           child: Text(
-                            colorShades[index].shadeValue,
+                            filteredShades[index].shadeValue,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: screenHeight / 65,

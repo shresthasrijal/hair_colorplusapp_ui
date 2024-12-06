@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ColorShade {
   final String type;
   final String shadeValue;
@@ -33,19 +35,42 @@ Map<String, List<String>> colorType = {
   'Cool Naturals': ['5.08', '7.08'],
   'Warm Brown': ['5.70', '5.77', '6.37', '7.71'],
   'Goldens': ['5.30', '6.30', '7.30', '8.30', '9.30'],
-  'Mahogany Red': ['4.65', '4.65_1', '5.65', '5.56'],
+  'Mahogany Red': ['4.65', '4.65_1',  '5.56'],
   'Mahogany': ['4.50', '5.50'],
   'Golden Mahogany': ['5.35'],
   'Intense Red': ['5.66', '6.66'],
-  'Violet': ['4.22', '5.22', '6.4', '7.4'],
+  'Violet': ['4.22', '5.22', '6.40', '7.40'],
   'Copper Golden': ['7.34', '8.34'],
   'Ash': ['7.10', '8.10', '9.10'],
   'Intense Ash': ['6.11', '7.11', '8.11', '9.11'],
   'Cold Brown': ['6.87', '8.71'],
   'Toners': ['9.08', '9.09', '10.89'],
-  'Super Lightner': ['11.90', '11.10', '11.89', '11.21'],
+  'Super Lightner': [ '11.10', '11.89', '11.21'],
   'Booster': ['0.99', '0.66', '0.33', '0.28', '0.25', 'green_booster'],
 };
+
+Map<String, Color> categoryColors = {
+  'Naturals': Colors.brown[400]!,
+  'Cool Naturals': Colors.grey[600]!,
+  'Warm Brown': Colors.brown[600]!,
+  'Goldens': Colors.amber[400]!,
+  'Mahogany Red': Colors.red[700]!,
+  'Mahogany': Colors.deepOrange[400]!,
+  'Golden Mahogany': Colors.orange[400]!,
+  'Intense Red': Colors.red[900]!,
+  'Violet': Colors.purple[700]!,
+  'Copper Golden': Colors.orange[300]!,
+  'Ash': Colors.blueGrey[400]!,
+  'Intense Ash': Colors.blueGrey[600]!,
+  'Cold Brown': Colors.brown[300]!,
+  'Toners': Colors.cyan[300]!,
+  'Super Lightner': Colors.yellow[200]!,
+  'Booster': Colors.pink[300]!,
+};
+
+//missing images:
+// shade '5.65'
+// shade '11.90'
 
 final List<String> shades = [
   '0.25',
